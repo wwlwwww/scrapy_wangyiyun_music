@@ -3,7 +3,7 @@
 from scrapy import cmdline
 
 if __name__ == '__main__':
-    name = 'artist_spider'
+    name = 'test_spider'
     cmd = 'scrapy crawl ' + name
     cmd = cmd + ' -s LOG_LEVEL=WARNING'
     cmd = cmd + ' -s JOBDIR=cache'

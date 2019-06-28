@@ -17,34 +17,46 @@ import time
 import os
 import queue
 
-from wangyiyun import items
+from music163 import items
 
 # artist_queue = queue.Queue(maxsize=10000)
 # album_queue = queue.Queue(maxsize=10000)
 
-class WangyiyunPipeline(object):
+class my_pipeline(object):
     def __init__(self):
         pass
 
     def process_item(self, item, spider):
         cursor = self.conn.cursor()
-        if isinstance(item, items.artist_item):
-            # cursor.execute(r'insert into t_artists values ({id}, "{name}", "{alias}", {album_size}, {music_size})'.format(id=item.artist_id, name=item.artist_name, alias=item.artist_alias, album_size=item.album_size, music_size=item.music_size))
+        try:
+            if isinstance(item, items.artist_item):
+                row = [item['artist_id'], item['artist_name'], item['artist_alias'],
+                    item['album_size'], item['music_size']]
+                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?)', row)
+
+            elif isinstance(item, items.albums_item):
+                # print("item: ", item)
+                row = [item['artist_id'], item['artist_name'], item['album_id'], item['album_name'],
+                               item['album_comments_id'], item['album_publishTS'], item['album_company'], item['album_size']]
+                cursor.execute(r'insert into t_albums values (?, ?, ?, ?, ?, ?, ?, ?)', row)
+        except sqlite3.IntegrityError as e:
+            pass
+        except Exception as e:
             print("item: ", item)
-        elif isinstance(item, items.albums_item):
-            print("item: ", item)
-            # cursor.execute(r'insert into t_albums values ({artist_id}, "{artist_name}", {id}, "{name}", "{comment_id}", {ts}, "{company}", {size})'.format(artist_id=item.artist_id, artist_name=item.artist_name, id=item.album_id, name=item.album_name,comment_id=item.album_comments_id, ts=item.album_publishTS, company=item.album_company, size=item.album_size))
-        # cursor.close()
-        # self.conn.commit()
+            print('exception: ', e)
+
+        cursor.close()
+        self.conn.commit()
 
     def open_spider(self, spider):
         db_path = '/home/wml/db/music163.db'
         db_path = 'C:/SQLite/DB/music163.db'
-        self.conn = sqlite3.connect()
+        self.conn = sqlite3.connect(db_path)
+
         logging.info("open spider in pipline")
 
     def close_spider(self, spider):
-        # self.conn.close()
+        self.conn.close()
         logging.info("close spider in pipline")
 
     @classmethod

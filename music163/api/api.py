@@ -10,7 +10,7 @@ from http.cookiejar import Cookie
 import requests
 from requests import cookies
 
-from wangyiyun.spiders.Proxy_handler import ProxyHandler
+from music163.spiders.Proxy_handler import ProxyHandler
 
 __all__ = ["encrypted_id", "encrypted_request"]
 

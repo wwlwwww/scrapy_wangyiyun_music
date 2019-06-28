@@ -1,6 +1,6 @@
 # coding: utf-8
 import requests
-from wangyiyun.spiders.Proxy_handler import ProxyHandler
+from music163.spiders.Proxy_handler import ProxyHandler
 
 
 def get_song_comments(music_id, offset=0, total='false', limit=100):

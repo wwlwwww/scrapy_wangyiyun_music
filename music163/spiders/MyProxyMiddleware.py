@@ -2,7 +2,7 @@
 import logging
 
 import requests
-from wangyiyun.spiders.Proxy_handler import ProxyHandler
+from music163.spiders.Proxy_handler import ProxyHandler
 
 class MyProxyMiddleware(object):
     db_url = "http://127.0.0.1:5010/get/"
