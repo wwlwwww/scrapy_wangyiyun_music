@@ -1,18 +1,66 @@
-# -*-coding:utf-8-*-
-
-
+# coding: utf-8
+import logging
 import random
-from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-class RotateUserAgentMiddleware(UserAgentMiddleware):
 
-    def __init__(self,user_agent=''):
-        self.user_agent=user_agent
+import requests
+import twisted
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+
+from music163.spiders.proxy_handler import ProxyHandler
+
+
+class proxy_mid(object):
+    qc_proxy = "http://118.24.154.108:8899"
+    db_url = "http://127.0.0.1:5010/get/"
+    delete_url = "http://127.0.0.1:5010/delete/?proxy={}"
 
     def process_request(self, request, spider):
-        UA=random.choice(self.user_agent_list)
-        if UA:
+        rd = random.randint(1,50)
+        if rd == 20:
+            return
+        if rd <= 3:
+            request.meta['proxy'] = proxy_mid.qc_proxy
+            return
+
+        tmp_proxy = ProxyHandler.random_get()
+        request.meta['proxy'] = tmp_proxy
+
+    # def process_response(self, request, response, spider):
+    #     if response.status != 200:
+    #         tmp_proxy = ProxyHandler.random_get()
+    #         request.meta['proxy'] = tmp_proxy
+    #         return request
+    #
+    #     return response
+    #
+    def process_exception(self, request, exception, spider):
+        if isinstance(exception, twisted.internet.error.TCPTimedOutError) or \
+                isinstance(exception, twisted.internet.error.TimeoutError) or \
+                isinstance(exception, twisted.internet.error.ConnectionDone) or \
+                isinstance(exception, twisted.internet.error.ConnectionRefusedError) or \
+                isinstance(exception, twisted.internet.error.ConnectionLost) or \
+                isinstance(exception, twisted.web._newclient.ResponseNeverReceived):
+
+            logging.error("download_mids, exception: ")
+            print(exception)
+            request.meta['proxy'] = proxy_mid.qc_proxy
+            request.dont_filter = True
+            return request
+        else:
+            logging.error("download_mids, uncatched exception: ")
+            print(exception)
+            request.meta['proxy'] = proxy_mid.qc_proxy
+            request.dont_filter = True
+            return request
+
+
+class ua_mid(object):
+
+    def process_request(self, request, spider):
+        ua = random.choice(self.user_agent_list)
+        if ua:
             # print "********Current UserAgent:%s************" % UA
-            request.headers.setdefault('User-Agent', UA)
+            request.headers['User-Agent'] = ua
 
     user_agent_list = [
         'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
@@ -42,3 +90,11 @@ class RotateUserAgentMiddleware(UserAgentMiddleware):
         'Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15G77 wxwork/2.5.8 MicroMessenger/6.3.22 Language/zh',
         'Mozilla/5.0 (iPhone; CPU iPhone OS 10_1_1 like Mac OS X) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0 MQQBrowser/8.8.2 Mobile/14B100 Safari/602.1 MttCustomUA/2 QBWebViewType/1 WKType/1',
     ]
+
+
+if __name__ == "__main__":
+    db_url = "http://127.0.0.1:5010/get/"
+    rep = requests.get(db_url)
+    print(rep.text)
+    proxy = 'http://' + rep.text
+    print(proxy)

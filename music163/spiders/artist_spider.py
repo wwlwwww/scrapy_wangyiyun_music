@@ -1,4 +1,4 @@
-#-*-coding:utf-8-*-
+# -*-coding:utf-8-*-
 import json
 import logging
 import socket
@@ -9,55 +9,35 @@ import scrapy
 from requests.exceptions import ProxyError, ConnectTimeout, ReadTimeout, ChunkedEncodingError, ConnectionError
 from scrapy.selector import Selector
 from scrapy.shell import inspect_response
-from scrapy.spiders import CrawlSpider,Rule
-from scrapy.linkextractors  import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
 import music163.api.api as api
 from music163 import items
-from music163.spiders.Proxy_handler import ProxyHandler
+from music163.spiders.proxy_handler import ProxyHandler
 import requests
 
 BASE_URL = "http://music.163.com"
+
 
 # 遍历artist，获取albums
 class artist_spider(scrapy.Spider):
     # 不可重复，spider的名字
     name = 'artist_spider'
+
     # allowed_domains=["music.163.com"]
 
-    # start_urls=[
-    #             "http://music.163.com/discover/artist",
-    #             "http://music.163.com/artist?id=91725",
-    #             "http://music.163.com/artist?id=1012032",
-    # ]
-
-    # rules = [Rule(LinkExtractor(allow=(r'/discover/artist/cat\?id=\d+')), follow=True),
-    #          Rule(LinkExtractor(allow=(r'/discover/artist/cat\?id=\d+&initial=\d+')), follow=True),
-    #          Rule(LinkExtractor(allow=(r'/artist\?id=\d+')), follow=True),
-    #          Rule(LinkExtractor(allow=(r'/artist/album\?id=\d+')), follow=True),
-    #          Rule(LinkExtractor(allow=(r'/artist/album\?id=\d+&limit=\d+&offset=\d+')), follow=True),
-    #          Rule(LinkExtractor(allow=(r'/album\?id=\d+')), callback='pare_song'),
-    #          ]
     # 遍历歌手，获取album
     def start_requests(self):
         # yield scrapy.Request("http://www.baidu.com", callback=self.parse_baidu)
 
-        artist_id = 2116
-        relative_path, params = api.get_artist_album(artist_id)
-        url = api.BASE_URL + relative_path
+        # yield self.get_request_albums_by_artist(123)
+        # return
 
-        csrf_token = ""
-        params.update({"csrf_token": csrf_token})
-        params = api.encrypted_request(params)
-        params = urlencode(params)
-        cookies = {'os': 'android'}
-        yield scrapy.Request(url, callback=self.parse_albums_by_artist, method="POST", headers=api.HEADERS, body=params,
-                             cookies=cookies, dont_filter=True)
-        # yield self.get_request_albums_by_artist(i)
-
-        # while i < 20000000:
-            # yield self.get_request_albums_by_artist(i)
-            # i = i + 1
+        i = 146000
+        while i < 500000:
+            yield self.get_request_albums_by_artist(i)
+            i = i + 1
 
     def get_request_albums_by_artist(self, artist_id):
         relative_path, params = api.get_artist_album(artist_id)
@@ -67,16 +47,35 @@ class artist_spider(scrapy.Spider):
         params.update({"csrf_token": csrf_token})
         params = api.encrypted_request(params)
         params = urlencode(params)
-        cookies = {'os': 'android'}
-        yield scrapy.Request(url, callback=self.parse_albums_by_artist, method="POST", headers=api.HEADERS, body=params,
-                             cookies=cookies, dont_filter=True)
+        # cookies = {'os': 'android'}
+        cookies = {}
+        # url = "http://music.163.com/weapi/artist/albums/43650"
+        return scrapy.Request(url, callback=self.parse_albums_by_artist, method="POST", headers=api.HEADERS,
+                              body=params,
+                              cookies=cookies, dont_filter=False)
+
 
     def parse_albums_by_artist(self, response):
+        # inspect_response(response, self)
+        req = response.request
+        req.dont_filter = True
         if response.status == 404:
+            logging.error("404")
             return
         elif response.status == 200:
-            # inspect_response(response, self)
-            res_json = json.loads(response.body)
+            if response.body is None or len(response.body) == 0:
+                return req
+            try:
+                res_json = json.loads(response.body)
+            except JSONDecodeError as e:
+                # print("response.body:[{}]".format(response.body))
+                print("response.url:[{}]".format(response.url))
+                print("proxy:{}".format(req.meta['proxy']))
+                return req
+            if res_json.get('code', 404) != 200:
+                logging.error("error get {}".format(response.url))
+                return
+
             artist_res = items.artist_item()
             artist_res['artist_id'] = res_json.get('artist', {'id': -1}).get('id')
             artist_res['artist_name'] = res_json.get('artist', {'name': '_yiming'}).get('name')
@@ -99,9 +98,8 @@ class artist_spider(scrapy.Spider):
             # 最后yield artist的
             yield artist_res
         else:
-           logging.error("status:{}, url:{}, rsp:{}".format(response.status, response.url, response.body.decode('utf-8')))
+            logging.error(
+                "status:{}, url:{}, rsp:{}".format(response.status, response.url, response.body.decode('utf-8')))
 
-
-
-
-
+    def parse_baidu(self, response):
+        print("hello baidu")

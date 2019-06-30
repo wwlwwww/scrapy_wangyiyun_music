@@ -10,7 +10,7 @@ from http.cookiejar import Cookie
 import requests
 from requests import cookies
 
-from music163.spiders.Proxy_handler import ProxyHandler
+from music163.spiders.proxy_handler import ProxyHandler
 
 __all__ = ["encrypted_id", "encrypted_request"]
 
@@ -124,6 +124,7 @@ def raw_request(method, url, params={}):
             proxies = {"http": tmp_proxy,
                        "https": tmp_proxy,
             }
+            proxies = {}
             try:
                 if method == "GET":
                     # url = 'http://httpbin.org/cookies'
@@ -154,6 +155,6 @@ def album(album_id):
 if __name__ == "__main__":
     # print(m.login("1223292709@qq.com", "WML13938182619"))
     relative_path, params = song_comments(411214279)
-    relative_path, params = album(10000)
+    # relative_path, params = album(43650)
     relative_path, params = get_artist_album(2116)
-    print(raw_request("POST", BASE_URL + relative_path + "?abc=xyz", params).text)
+    print(raw_request("POST", BASE_URL + relative_path + "?abc=xyz", params).json())
