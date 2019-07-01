@@ -5,6 +5,7 @@ import random
 import requests
 import twisted
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from twisted.internet.error import T
 
 from music163.spiders.proxy_handler import ProxyHandler
 
@@ -31,11 +32,15 @@ class proxy_mid(object):
     #     return response
     #
     def process_exception(self, request, exception, spider):
-        if isinstance(exception, twisted.internet.error.TCPTimedOutError) or \
+
+        if isinstance(exception, twisted.internet.error.ConnectError) or \
+                isinstance(exception, twisted.internet.error.TCPTimedOutError) or \
                 isinstance(exception, twisted.internet.error.TimeoutError) or \
                 isinstance(exception, twisted.internet.error.ConnectionDone) or \
                 isinstance(exception, twisted.internet.error.ConnectionRefusedError) or \
                 isinstance(exception, twisted.internet.error.ConnectionLost) or \
+                isinstance(exception, twisted.internet.error.ConnectionClosed) or \
+                isinstance(exception, twisted.internet.error.ConnectionAborted) or \
                 isinstance(exception, twisted.web._newclient.ResponseNeverReceived):
 
             logging.error("download_mids, exception: ")

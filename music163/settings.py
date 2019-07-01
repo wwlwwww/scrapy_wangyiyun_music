@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'music163.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 1536
+CONCURRENT_REQUESTS = 3072
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -29,6 +29,14 @@ CONCURRENT_REQUESTS = 1536
 # DOWNLOAD_DELAY = 0.001
 
 DOWNLOAD_TIMEOUT = 5
+
+DOWNLOAD_FAIL_ON_DATALOSS = True
+
+RETRY_ENABLED = True
+RETRY_TIMES = 2
+RETRY_PRIORITY_ADJUST = 1
+
+
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 30
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -56,8 +64,8 @@ DOWNLOAD_TIMEOUT = 5
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-    'music163.spiders.download_mids.proxy_mid': 300,
-    'music163.spiders.download_mids.proxy_mid': 400,
+    'music163.spiders.download_mids.proxy_mid': 100,
+    'music163.spiders.download_mids.ua_mid': 200,
 }
 
 DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'

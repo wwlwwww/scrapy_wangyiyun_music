@@ -34,8 +34,8 @@ class artist_spider(scrapy.Spider):
         # yield self.get_request_albums_by_artist(123)
         # return
 
-        i = 331400
-        while i < 500000:
+        i = 400000
+        while i < 1000000:
             yield self.get_request_albums_by_artist(i)
             i = i + 1
 
