@@ -2,16 +2,20 @@
 import logging
 import os
 import sqlite3
+from os import path
 from urllib.parse import parse_qs, urlparse
 
 from bitmap.bitmap import BitMap
 from scrapy.dupefilters import RFPDupeFilter, BaseDupeFilter
 
+from music163 import settings
+
+
 class artist_id_fileter(BaseDupeFilter):
     def __init__(self):
         self.seen_artist = BitMap(1000000)
 
-        db_path = 'C:/SQLite/DB/music163.db'
+        db_path = path.join(settings.DB_PATH, 'music163.db')
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute('select f_id from t_artists')

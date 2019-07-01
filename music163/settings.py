@@ -74,6 +74,9 @@ ITEM_PIPELINES = {
     'music163.pipelines.my_pipeline': 300,
 }
 
+# DB_PATH = 'C:/SQLite/DB/'
+DB_PATH = "/home/wml/db/tp_db/"
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True

@@ -6,18 +6,14 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import sqlite3
 import threading
+from os import path
 
 from pymongo import MongoClient
 from pymongo.helpers import DuplicateKeyError
-from scrapy.conf import settings
 import logging
-from scrapy.exceptions import CloseSpider
-import sys
-import time
-import os
-import queue
 
-from music163 import items
+from music163 import items, settings
+
 
 # artist_queue = queue.Queue(maxsize=10000)
 # album_queue = queue.Queue(maxsize=10000)
@@ -49,8 +45,7 @@ class my_pipeline(object):
         self.conn.commit()
 
     def open_spider(self, spider):
-        db_path = '/home/wml/db/music163.db'
-        db_path = 'C:/SQLite/DB/music163.db'
+        db_path = path.join(settings.DB_PATH, 'music163.db')
         self.conn = sqlite3.connect(db_path)
 
         logging.info("open spider in pipline")
@@ -65,12 +60,10 @@ class my_pipeline(object):
 
 class artist_intodb_thread(threading.Thread):
     def run(self) -> None:
-        # conn = sqlite3.connect("/home/wml/db/music163.db")
 
         pass
 
 class album_intodb_thread(threading.Thread):
     def run(self) -> None:
-        # conn = sqlite3.connect('/home/wml/db/music163.db')
 
         pass
