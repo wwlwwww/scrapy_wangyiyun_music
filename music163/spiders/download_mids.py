@@ -5,7 +5,6 @@ import random
 import requests
 import twisted
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-from twisted.internet.error import T
 
 from music163.spiders.proxy_handler import ProxyHandler
 
