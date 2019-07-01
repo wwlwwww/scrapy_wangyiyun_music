@@ -10,16 +10,13 @@ from music163.spiders.proxy_handler import ProxyHandler
 
 
 class proxy_mid(object):
-    qc_proxy = "http://118.24.154.108:8899"
+    # qc_proxy = "http://118.24.154.108:8899"
     db_url = "http://127.0.0.1:5010/get/"
     delete_url = "http://127.0.0.1:5010/delete/?proxy={}"
 
     def process_request(self, request, spider):
         rd = random.randint(1,50)
-        if rd == 20:
-            return
-        if rd <= 3:
-            request.meta['proxy'] = proxy_mid.qc_proxy
+        if rd < 10:
             return
 
         tmp_proxy = ProxyHandler.random_get()
@@ -43,13 +40,13 @@ class proxy_mid(object):
 
             logging.error("download_mids, exception: ")
             print(exception)
-            request.meta['proxy'] = proxy_mid.qc_proxy
+            request.meta['proxy'] = ""
             request.dont_filter = True
             return request
         else:
             logging.error("download_mids, uncatched exception: ")
             print(exception)
-            request.meta['proxy'] = proxy_mid.qc_proxy
+            request.meta['proxy'] = ""
             request.dont_filter = True
             return request
 
