@@ -124,7 +124,7 @@ def raw_request(method, url, params={}):
             proxies = {"http": tmp_proxy,
                        "https": tmp_proxy,
             }
-            proxies = {}
+            # proxies = {}
             try:
                 if method == "GET":
                     # url = 'http://httpbin.org/cookies'
@@ -156,5 +156,5 @@ if __name__ == "__main__":
     # print(m.login("1223292709@qq.com", "WML13938182619"))
     relative_path, params = song_comments(411214279)
     # relative_path, params = album(43650)
-    relative_path, params = get_artist_album(2116)
+    relative_path, params = get_artist_album(340623)
     print(raw_request("POST", BASE_URL + relative_path + "?abc=xyz", params).json())
