@@ -73,7 +73,8 @@ class artist_spider(scrapy.Spider):
                 print("proxy:{}".format(req.meta['proxy']))
                 return req
             if res_json.get('code', 404) != 200:
-                logging.error("error get {}".format(response.url))
+                # invalid id
+                # logging.error("error get {}".format(response.url))
                 return
 
             artist_res = items.artist_item()
