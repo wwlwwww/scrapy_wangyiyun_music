@@ -62,7 +62,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
 
-HTTPERROR_ALLOWED_CODES = [403, 404]
+HTTPERROR_ALLOW_ALL = True
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
