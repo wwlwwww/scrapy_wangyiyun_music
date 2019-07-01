@@ -59,8 +59,8 @@ class artist_spider(scrapy.Spider):
         # inspect_response(response, self)
         req = response.request
         req.dont_filter = True
-        if response.status == 404:
-            logging.error("404")
+        if response.status == 404 or response.status == 403:
+            logging.error("code:{}, url: {}, proxy:{}".format(response.status, response.url, req.meta['proxy']))
             return
         elif response.status == 200:
             if response.body is None or len(response.body) == 0:
