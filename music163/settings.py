@@ -33,12 +33,12 @@ DOWNLOAD_TIMEOUT = 5
 DOWNLOAD_FAIL_ON_DATALOSS = True
 
 RETRY_ENABLED = True
-RETRY_TIMES = 2
+RETRY_TIMES = 10
 RETRY_PRIORITY_ADJUST = 1
 
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 512
-CONCURRENT_REQUESTS_PER_IP = 512
+CONCURRENT_REQUESTS_PER_DOMAIN = 350
+CONCURRENT_REQUESTS_PER_IP = 350
 
 
 
@@ -69,7 +69,7 @@ DOWNLOADER_MIDDLEWARES = {
     'music163.spiders.download_mids.ua_mid': 200,
 }
 
-DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
+# DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
 
 HTTPERROR_ALLOW_ALL = True
 
@@ -87,8 +87,8 @@ ITEM_PIPELINES = {
 
 CONCURRENT_ITEMS = 1000
 
-# DB_PATH = 'C:/SQLite/DB/'
-DB_PATH = "/home/wml/db/tp_db/"
+DB_PATH = 'C:/SQLite/DB/'
+# DB_PATH = "/home/wml/db/tp_db/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
