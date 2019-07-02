@@ -20,9 +20,12 @@ from music163 import items, settings
 
 class my_pipeline(object):
     def __init__(self):
+        db_path = path.join(settings.DB_PATH, 'music163.db')
+        self.conn = sqlite3.connect(db_path)
         pass
 
     def process_item(self, item, spider):
+        logging.debug("item: %s", item)
         cursor = self.conn.cursor()
         try:
             if isinstance(item, items.artist_item):
@@ -45,13 +48,9 @@ class my_pipeline(object):
         self.conn.commit()
 
     def open_spider(self, spider):
-        db_path = path.join(settings.DB_PATH, 'music163.db')
-        self.conn = sqlite3.connect(db_path)
-
         logging.info("open spider in pipline")
 
     def close_spider(self, spider):
-        self.conn.close()
         logging.info("close spider in pipline")
 
     @classmethod
@@ -65,5 +64,4 @@ class artist_intodb_thread(threading.Thread):
 
 class album_intodb_thread(threading.Thread):
     def run(self) -> None:
-
         pass

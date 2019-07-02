@@ -21,7 +21,7 @@ NEWSPIDER_MODULE = 'music163.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 8192
+CONCURRENT_REQUESTS = 2048
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -37,8 +37,8 @@ RETRY_TIMES = 2
 RETRY_PRIORITY_ADJUST = 1
 
 # The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 1024
-CONCURRENT_REQUESTS_PER_IP = 1024
+CONCURRENT_REQUESTS_PER_DOMAIN = 512
+CONCURRENT_REQUESTS_PER_IP = 512
 
 
 
@@ -112,3 +112,6 @@ AUTOTHROTTLE_ENABLED = False
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 MEMUSAGE_ENABLED = False
+
+TELNETCONSOLE_USERNAME = "scrapy"
+TELNETCONSOLE_PASSWORD = "scrapy"

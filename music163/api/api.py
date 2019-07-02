@@ -99,7 +99,7 @@ HEADERS = {
         "Accept-Language": "zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4",
         "Connection": "keep-alive",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Host": "music.163.com",
+        # "Host": "music.163.com",
         "Referer": "http://music.163.com",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36",
 }
@@ -156,5 +156,6 @@ if __name__ == "__main__":
     # print(m.login("1223292709@qq.com", "WML13938182619"))
     relative_path, params = song_comments(411214279)
     # relative_path, params = album(43650)
-    relative_path, params = get_artist_album(340623)
+    relative_path, params = get_artist_album(1012032)
     print(raw_request("POST", BASE_URL + relative_path + "?abc=xyz", params).json())
+
