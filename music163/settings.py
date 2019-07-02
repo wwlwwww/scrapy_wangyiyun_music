@@ -69,7 +69,7 @@ DOWNLOADER_MIDDLEWARES = {
     'music163.spiders.download_mids.ua_mid': 200,
 }
 
-# DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
+DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
 
 HTTPERROR_ALLOW_ALL = True
 
