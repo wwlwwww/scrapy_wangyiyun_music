@@ -15,9 +15,9 @@ class proxy_mid(object):
     delete_url = "http://127.0.0.1:5010/delete/?proxy={}"
 
     def process_request(self, request, spider):
-        rd = random.randint(1,50)
-        if rd < 10:
-            return
+        # rd = random.randint(1,50)
+        # if rd < 10:
+        #     return
 
         tmp_proxy = ProxyHandler.random_get()
         request.meta['proxy'] = tmp_proxy
