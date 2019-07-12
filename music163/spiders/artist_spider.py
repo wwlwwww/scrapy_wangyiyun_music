@@ -14,6 +14,7 @@ from scrapy.linkextractors import LinkExtractor
 
 import music163.api.api as api
 from music163 import items
+from music163.spiders import proxy_handler
 from music163.spiders.proxy_handler import ProxyHandler
 import requests
 
@@ -64,14 +65,16 @@ class artist_spider(scrapy.Spider):
             return
         elif response.status == 200:
             if response.body is None or len(response.body) == 0:
-                return req
+                yield req
+                return
             try:
                 res_json = json.loads(response.body)
             except JSONDecodeError as e:
                 # print("response.body:[{}]".format(response.body))
                 print("response.url:[{}]".format(response.url))
                 print("proxy:{}".format(req.meta['proxy']))
-                return req
+                yield req
+                return
 
             artist_res = items.artist_item()
             content_code = res_json.get('code', -1)
@@ -81,12 +84,19 @@ class artist_spider(scrapy.Spider):
                 artist_res['artist_alias'] = ""
                 artist_res['album_size'] = 0
                 artist_res['music_size'] = 0
-                return artist_res
+                yield artist_res
+                return
+            if content_code == 460:
+                proxy = req.meta['proxy']
+                proxy_handler.ProxyHandler.delete_proxy(proxy)
+                yield req
+                return
 
             if content_code != 200:
                 # invalid id
                 logging.error("error code: {}, url: {}".format(content_code, response.url))
                 logging.error("error get {}".format(response.url))
+                yield req
                 return
             else:
                 artist_res['artist_id'] = res_json.get('artist', {'id': -1}).get('id')

@@ -19,6 +19,6 @@ class ProxyHandler():
 
     @staticmethod
     def delete_proxy(proxy):
-        # logging.info(msg="delete proxy: {}".format(proxy))
+        logging.info(msg="delete proxy: {}".format(proxy))
         url = "http://127.0.0.1:5010/delete/?proxy={}"
         requests.get(url.format(proxy))

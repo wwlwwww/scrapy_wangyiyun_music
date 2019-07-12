@@ -35,7 +35,7 @@ DOWNLOAD_TIMEOUT = 5
 DOWNLOAD_FAIL_ON_DATALOSS = True
 
 RETRY_ENABLED = True
-RETRY_TIMES = 10
+RETRY_TIMES = 100
 RETRY_PRIORITY_ADJUST = 1
 
 # The download delay setting will honor only one of:
