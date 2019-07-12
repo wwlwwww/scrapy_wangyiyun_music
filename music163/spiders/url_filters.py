@@ -13,7 +13,7 @@ from music163 import settings
 
 class artist_id_fileter(BaseDupeFilter):
     def __init__(self):
-        self.seen_artist = BitMap(1000000)
+        self.seen_artist = BitMap(13000000)
 
         db_path = path.join(settings.DB_PATH, 'music163.db')
         conn = sqlite3.connect(db_path)

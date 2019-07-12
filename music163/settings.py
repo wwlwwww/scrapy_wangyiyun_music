@@ -8,6 +8,8 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+import os
+import platform
 
 BOT_NAME = 'music163'
 
@@ -85,10 +87,12 @@ ITEM_PIPELINES = {
     'music163.pipelines.my_pipeline': 300,
 }
 
-CONCURRENT_ITEMS = 1000
+CONCURRENT_ITEMS = 20
 
-DB_PATH = 'C:/SQLite/DB/'
-# DB_PATH = "/home/wml/db/tp_db/"
+if platform.system() == "Windows":
+    DB_PATH = 'C:/SQLite/DB/'
+else:
+    DB_PATH = "/home/wml/db/tp_db/"
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -143,7 +143,7 @@ def raw_request(method, url, params={}):
 
 # artist_id --> albums
 def get_artist_album(artist_id, offset=0, limit=200):
-    path = "/weapi/artist/albums/{}".format(artist_id)
+    path = "{}".format(artist_id)
     params = dict(offset=offset, total=True, limit=limit)
     return path, params
 

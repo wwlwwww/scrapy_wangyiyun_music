@@ -59,7 +59,6 @@ class my_pipeline(object):
 
 class artist_intodb_thread(threading.Thread):
     def run(self) -> None:
-
         pass
 
 class album_intodb_thread(threading.Thread):

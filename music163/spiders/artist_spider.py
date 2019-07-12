@@ -34,8 +34,8 @@ class artist_spider(scrapy.Spider):
         # yield self.get_request_albums_by_artist(123)
         # return
 
-        i = 12184367
-        while i < 12184368:
+        i = 800000
+        while i < 1000000:
             yield self.get_request_albums_by_artist(i)
             i = i + 1
 
@@ -72,35 +72,53 @@ class artist_spider(scrapy.Spider):
                 print("response.url:[{}]".format(response.url))
                 print("proxy:{}".format(req.meta['proxy']))
                 return req
-            if res_json.get('code', 404) != 200:
-                # invalid id
-                # logging.error("error get {}".format(response.url))
-                return
 
             artist_res = items.artist_item()
-            artist_res['artist_id'] = res_json.get('artist', {'id': -1}).get('id')
-            artist_res['artist_name'] = res_json.get('artist', {'name': '_yiming'}).get('name')
-            artist_res['artist_alias'] = '|'.join(res_json.get('artist', {'alias': ['']}).get('alias'))
-            artist_res['album_size'] = res_json.get('artist', {'albumSize': -1}).get('albumSize')
-            artist_res['music_size'] = res_json.get('artist', {'musicSize': -1}).get('musicSize')
+            content_code = res_json.get('code', -1)
+            if content_code == 404:
+                artist_res['artist_id'] = self.get_artistID_fromURL(response.url)
+                artist_res['artist_name'] = ""
+                artist_res['artist_alias'] = ""
+                artist_res['album_size'] = 0
+                artist_res['music_size'] = 0
+                return artist_res
 
-            for i in range(len(res_json.get('hotAlbums', {}))):
-                album_res = items.albums_item()
-                album_res['artist_id'] = artist_res['artist_id']
-                album_res['artist_name'] = artist_res['artist_name']
-                album_res['album_id'] = res_json['hotAlbums'][i].get('id', -1)
-                album_res['album_name'] = res_json['hotAlbums'][i].get('name', '_yiming')
-                album_res['album_comments_id'] = res_json['hotAlbums'][i].get('commentThreadId', '')
-                album_res['album_publishTS'] = res_json['hotAlbums'][i].get('publishTime', -1000) // 1000
-                album_res['album_company'] = res_json['hotAlbums'][i].get('company', '')
-                album_res['album_size'] = res_json['hotAlbums'][i].get('size', -1)
-                yield album_res
+            if content_code != 200:
+                # invalid id
+                logging.error("error code: {}, url: {}".format(content_code, response.url))
+                logging.error("error get {}".format(response.url))
+                return
+            else:
+                artist_res['artist_id'] = res_json.get('artist', {'id': -1}).get('id')
+                artist_res['artist_name'] = res_json.get('artist', {'name': '_yiming'}).get('name')
+                artist_res['artist_alias'] = '|'.join(res_json.get('artist', {'alias': ['']}).get('alias'))
+                artist_res['album_size'] = res_json.get('artist', {'albumSize': -1}).get('albumSize')
+                artist_res['music_size'] = res_json.get('artist', {'musicSize': -1}).get('musicSize')
 
-            # 最后yield artist的
-            yield artist_res
+                for i in range(len(res_json.get('hotAlbums', {}))):
+                    album_res = items.albums_item()
+                    album_res['artist_id'] = artist_res['artist_id']
+                    album_res['artist_name'] = artist_res['artist_name']
+                    album_res['album_id'] = res_json['hotAlbums'][i].get('id', -1)
+                    album_res['album_name'] = res_json['hotAlbums'][i].get('name', '_yiming')
+                    album_res['album_comments_id'] = res_json['hotAlbums'][i].get('commentThreadId', '')
+                    album_res['album_publishTS'] = res_json['hotAlbums'][i].get('publishTime', -1000) // 1000
+                    album_res['album_company'] = res_json['hotAlbums'][i].get('company', '')
+                    album_res['album_size'] = res_json['hotAlbums'][i].get('size', -1)
+                    yield album_res
+
+                # 最后yield artist的
+                yield artist_res
         else:
             logging.error(
                 "status:{}, url:{}, rsp:{}".format(response.status, response.url, response.body.decode('utf-8')))
 
     def parse_baidu(self, response):
         print("hello baidu")
+
+    # http://music.163.com/weapi/v1/album/
+    def get_artistID_fromURL(self, url):
+        uid = url[36:]
+        return int(uid)
+
+
