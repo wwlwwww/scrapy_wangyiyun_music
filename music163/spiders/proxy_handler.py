@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+import time
 
 import requests
 class ProxyHandler():
@@ -9,13 +10,17 @@ class ProxyHandler():
         # return "http://127.0.0.1:12759"
 
         db_url = "http://127.0.0.1:5010/get/"
-        rsp = requests.get(db_url)
-        host = rsp.text
-        if host == "":
-            return ""
-        else:
-            tmp_proxy = 'http://' + host
-            return tmp_proxy
+
+        while True:
+            rsp = requests.get(db_url)
+            host = rsp.text
+            if host == "":
+                time.sleep(10)
+                logging.error("no proxy")
+                continue
+            else:
+                tmp_proxy = 'http://' + host
+                return tmp_proxy
 
     @staticmethod
     def delete_proxy(proxy):
