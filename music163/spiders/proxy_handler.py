@@ -6,7 +6,8 @@ class ProxyHandler():
 
     @staticmethod
     def random_get():
-        # return "http://127.0.0.1:12759"
+
+        return "http://127.0.0.1:12759"
 
         db_url = "http://127.0.0.1:5010/get/"
         rsp = requests.get(db_url)
