@@ -86,7 +86,7 @@ class artist_spider(scrapy.Spider):
                 artist_res['music_size'] = 0
                 yield artist_res
                 return
-            if content_code == 460:
+            if content_code == -460:
                 proxy = req.meta['proxy']
                 proxy_handler.ProxyHandler.delete_proxy(proxy)
                 yield req
