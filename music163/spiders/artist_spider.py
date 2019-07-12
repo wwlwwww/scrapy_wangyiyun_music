@@ -118,8 +118,8 @@ class artist_spider(scrapy.Spider):
 
     # http://music.163.com/weapi/v1/album/
     def get_artistID_fromURL(self, url):
-        uid = url[41:]
-        logging.DEBUG("url:{}, uid:{} ".format(url, uid))
-        return int(uid)
+        uid = int(url[41:])
+        logging.debug("url:{}, uid:{}".format(url, uid))
+        return uid
 
 
