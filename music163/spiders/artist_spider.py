@@ -15,7 +15,6 @@ from scrapy.linkextractors import LinkExtractor
 import music163.api.api as api
 from music163 import items
 from music163.spiders import proxy_handler
-from music163.spiders.proxy_handler import ProxyHandler
 import requests
 
 BASE_URL = "http://music.163.com"
