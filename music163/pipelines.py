@@ -17,7 +17,7 @@ from music163 import items, settings
 
 # artist_queue = queue.Queue(maxsize=10000)
 # album_queue = queue.Queue(maxsize=10000)
-from music163.spiders import db_pool
+from .spiders import db_pool
 
 
 class my_pipeline(object):
