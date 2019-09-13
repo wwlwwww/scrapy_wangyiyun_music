@@ -32,7 +32,7 @@ class my_pipeline(object):
             if isinstance(item, items.artist_item):
                 row = [item['artist_id'], item['artist_name'], item['artist_alias'],
                     item['album_size'], item['music_size']]
-                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?) on duplicate key update f_name={}, f_alias={}, '
+                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?) on duplicate key update f_name="{}", f_alias="{}", '
                                r'f_album_size={}, f_music_size={}'.format(
                                  item['artist_name'], item['artist_alias'], item['album_size'], item['music_size']), row)
 
@@ -41,8 +41,8 @@ class my_pipeline(object):
                 row = [item['artist_id'], item['artist_name'], item['album_id'], item['album_name'],
                                item['album_comments_id'], item['album_publishTS'], item['album_company'], item['album_size']]
                 cursor.execute(r'insert into t_albums values (?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update '
-                               r'f_artist_id={}, f_artist_name={}, f_album_name={}, f_album_comment_id={}, f_album_ts={},'
-                               r'f_album_company={}, f_album_size={}'.format(item['artist_id'], item['artist_name'], item['album_name'],
+                               r'f_artist_id={}, f_artist_name="{}", f_album_name="{}", f_album_comment_id={}, f_album_ts={},'
+                               r'f_album_company="{}", f_album_size={}'.format(item['artist_id'], item['artist_name'], item['album_name'],
                                item['album_comments_id'], item['album_publishTS'], item['album_company'], item['album_size']), row)
         except sqlite3.IntegrityError as e:
             pass
