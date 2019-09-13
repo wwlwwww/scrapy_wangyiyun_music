@@ -35,7 +35,7 @@ class artist_spider(scrapy.Spider):
         # yield self.get_request_albums_by_artist(123)
         # return
 
-        i = 800000
+        i = 1
         while i < 1000000:
             yield self.get_request_albums_by_artist(i)
             i = i + 1
@@ -62,19 +62,21 @@ class artist_spider(scrapy.Spider):
         req.dont_filter = True
         if response.status != 200:
             logging.error("code:{}, url: {}, proxy:{}".format(response.status, response.url, req.meta['proxy']))
+            proxy_handler.delete_proxy(req.meta['proxy'][7:])
             return
         elif response.status == 200:
+            # 请求成功
             if response.body is None or len(response.body) == 0:
-                yield req
-                return
+                proxy_handler.delete_proxy(req.meta['proxy'][7:])
+                return req
             try:
                 res_json = json.loads(response.body)
             except JSONDecodeError as e:
                 # print("response.body:[{}]".format(response.body))
                 print("response.url:[{}]".format(response.url))
                 print("proxy:{}".format(req.meta['proxy']))
-                yield req
-                return
+                proxy_handler.delete_proxy(req.meta['proxy'][7:])
+                return req
 
             artist_res = items.artist_item()
             content_code = res_json.get('code', -1)
@@ -82,28 +84,28 @@ class artist_spider(scrapy.Spider):
                 artist_res['artist_id'] = self.get_artistID_fromURL(response.url)
                 artist_res['artist_name'] = ""
                 artist_res['artist_alias'] = ""
-                artist_res['album_size'] = 0
-                artist_res['music_size'] = 0
+                artist_res['album_size'] = -1
+                artist_res['music_size'] = -1
                 yield artist_res
                 return
             if content_code == -460:
                 proxy = req.meta['proxy']
-                proxy_handler.ProxyHandler.delete_proxy(proxy)
-                yield req
-                return
+                proxy_handler.delete_proxy(req.meta['proxy'][7:])
+                return req
 
             if content_code != 200:
                 # invalid id
                 logging.error("error code: {}, url: {}".format(content_code, response.url))
                 logging.error("error get {}".format(response.url))
-                yield req
-                return
+                return req
             else:
+                # 成功
                 artist_res['artist_id'] = res_json.get('artist', {'id': -1}).get('id')
                 artist_res['artist_name'] = res_json.get('artist', {'name': '_yiming'}).get('name')
                 artist_res['artist_alias'] = '|'.join(res_json.get('artist', {'alias': ['']}).get('alias'))
                 artist_res['album_size'] = res_json.get('artist', {'albumSize': -1}).get('albumSize')
                 artist_res['music_size'] = res_json.get('artist', {'musicSize': -1}).get('musicSize')
+                yield artist_res
 
                 for i in range(len(res_json.get('hotAlbums', {}))):
                     album_res = items.albums_item()
@@ -116,15 +118,6 @@ class artist_spider(scrapy.Spider):
                     album_res['album_company'] = res_json['hotAlbums'][i].get('company', '')
                     album_res['album_size'] = res_json['hotAlbums'][i].get('size', -1)
                     yield album_res
-
-                # 最后yield artist的
-                yield artist_res
-        else:
-            logging.error(
-                "status:{}, url:{}, rsp:{}".format(response.status, response.url, response.body.decode('utf-8')))
-
-    def parse_baidu(self, response):
-        print("hello baidu")
 
     # http://music.163.com/weapi/v1/album/
     def get_artistID_fromURL(self, url):
