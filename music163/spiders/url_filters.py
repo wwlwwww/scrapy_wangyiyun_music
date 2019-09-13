@@ -12,10 +12,12 @@ from scrapy.dupefilters import RFPDupeFilter, BaseDupeFilter
 import DBUtils
 
 from music163 import settings
+from music163.spiders import db
+
 
 class artist_id_fileter(BaseDupeFilter):
     def __init__(self):
-        self.seen_artist = BitMap(13000000)
+        self.seen_artist = BitMap(20000000)
         cursor = db.cursor()
         cursor.execute('select f_id from t_artists')
         for row in cursor:
