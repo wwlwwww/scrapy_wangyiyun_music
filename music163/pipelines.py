@@ -17,7 +17,7 @@ from music163 import items, settings
 
 # artist_queue = queue.Queue(maxsize=10000)
 # album_queue = queue.Queue(maxsize=10000)
-from music163.spiders import db
+from music163.spiders import db_pool
 
 
 class my_pipeline(object):
@@ -26,7 +26,7 @@ class my_pipeline(object):
 
     def process_item(self, item, spider):
         logging.debug("item: %s", item)
-        conn = db.pool.connection()
+        conn = db_pool.pool.connection()
         cursor = conn.cursor()
         try:
             if isinstance(item, items.artist_item):
