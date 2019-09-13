@@ -12,7 +12,7 @@ from scrapy.dupefilters import RFPDupeFilter, BaseDupeFilter
 import DBUtils
 
 from music163 import settings
-import db_pool
+from music163.spiders import db_pool
 
 
 class artist_id_fileter(BaseDupeFilter):
