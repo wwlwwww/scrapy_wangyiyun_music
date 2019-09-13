@@ -10,7 +10,7 @@ from http.cookiejar import Cookie
 import requests
 from requests import cookies
 
-from music163.spiders.proxy_handler import ProxyHandler
+from music163.spiders import proxy_handler
 
 __all__ = ["encrypted_id", "encrypted_request"]
 
@@ -117,7 +117,7 @@ def raw_request(method, url, params={}):
     cookies = {}
 
     while True:
-        proxy_rsp = ProxyHandler.random_get()
+        proxy_rsp = proxy_handler.random_get()
         if proxy_rsp != "":
             tmp_proxy = 'http://' + proxy_rsp
             tmp_proxy = 'http://127.0.0.1:12759'
