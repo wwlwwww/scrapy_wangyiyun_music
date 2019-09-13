@@ -1,18 +1,11 @@
 # coding: utf-8
 import logging
 import os
-import sqlite3
 from os import path
 from urllib.parse import parse_qs, urlparse
 
-import pymysql as pymysql
 from bitmap.bitmap import BitMap
 from scrapy.dupefilters import RFPDupeFilter, BaseDupeFilter
-
-import DBUtils
-
-from music163 import settings
-from . import db_pool
 
 
 class artist_id_fileter(BaseDupeFilter):
