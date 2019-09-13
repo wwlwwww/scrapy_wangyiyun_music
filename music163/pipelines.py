@@ -32,8 +32,8 @@ class my_pipeline(object):
             if isinstance(item, items.artist_item):
                 row = [item['artist_id'], item['artist_name'], item['artist_alias'],
                     item['album_size'], item['music_size']]
-                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?) on duplicate key update f_name="{}", f_alias="{}", f_album_size={}, f_music_size={}'.format(
-                                 item['artist_name'], item['artist_alias'], item['album_size'], item['music_size']), row)
+                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?) on duplicate key update f_name=?, f_alias=?, f_album_size=?, f_music_size=?',
+                               row.append + [item['artist_name'], item['artist_alias'], item['album_size'], item['music_size']])
 
             elif isinstance(item, items.albums_item):
                 # print("item: ", item)
