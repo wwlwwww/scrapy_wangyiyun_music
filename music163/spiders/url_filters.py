@@ -19,7 +19,8 @@ class artist_id_fileter(BaseDupeFilter):
 
         cursor.execute('select f_id, f_music_size from t_artists')
         for row in cursor:
-            if int(row[0]) > 0 or int(row[0]) < 0:
+            # 证明获取成功，不再重复
+            if int(row[1]) > 0 or int(row[1]) < 0:
                 self.seen_artist.set(row[0])
 
         cursor.close()
