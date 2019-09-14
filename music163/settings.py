@@ -67,11 +67,15 @@ CONCURRENT_REQUESTS_PER_IP = 30
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
-    'music163.spiders.download_mids.proxy_mid': 100,
-    'music163.spiders.download_mids.ua_mid': 200,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'music163.spiders.download_mids.proxy_mid': 2000,
+    'music163.spiders.download_mids.ua_mid': 2001,
 }
 
-DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_fileter'
+DUPEFILTER_CLASS = 'music163.spiders.url_filters.artist_id_filter'
+
+# disable telnet for some unknown warnings
+TELNETCONSOLE_ENABLED = False
 
 HTTPERROR_ALLOW_ALL = True
 

@@ -10,7 +10,7 @@ from scrapy.dupefilters import RFPDupeFilter, BaseDupeFilter
 
 from music163.spiders import db_pool
 
-class artist_id_fileter(BaseDupeFilter):
+class artist_id_filter(BaseDupeFilter):
     def __init__(self):
         db = pymysql.connect(host="172.27.0.10", port=3306, user="root", password="wmlhust12", db="music163")
 
