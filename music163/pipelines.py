@@ -50,8 +50,10 @@ class my_pipeline(object):
             print("item: ", item)
             print('exception: ', e)
 
-        cursor.close()
         conn.commit()
+
+        cursor.close()
+        conn.close()
 
     def open_spider(self, spider):
         logging.info("open spider in pipline")
