@@ -64,8 +64,8 @@ class artist_spider(scrapy.Spider):
         if response.status != 200:
             logging.error("code:{}, url: {}, proxy:{}".format(response.status, response.url, req.meta['proxy']))
             proxy_handler.delete_proxy(req.meta['proxy'][7:])
-            return
-        elif response.status == 200:
+            return req
+        else:
             # 请求成功
             if response.body is None or len(response.body) == 0:
                 proxy_handler.delete_proxy(req.meta['proxy'][7:])
@@ -87,8 +87,8 @@ class artist_spider(scrapy.Spider):
                 artist_res['artist_alias'] = ""
                 artist_res['album_size'] = -1
                 artist_res['music_size'] = -1
-                yield artist_res
-                return
+                return artist_res
+
             if content_code == -460:
                 proxy = req.meta['proxy']
                 proxy_handler.delete_proxy(req.meta['proxy'][7:])
