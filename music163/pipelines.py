@@ -31,15 +31,16 @@ class my_pipeline(object):
         try:
             if isinstance(item, items.artist_item):
                 row = [item['artist_id'], item['artist_name'], item['artist_alias'],
-                    item['album_size'], item['music_size'], item['artist_name'], item['artist_alias'], item['album_size'], item['music_size']]
-                cursor.execute(r'insert into t_artists values (?, ?, ?, ?, ?) on duplicate key update f_name=?, f_alias=?, f_album_size=?, f_music_size=?',
+                       item['album_size'], item['music_size'], item['artist_name'],
+                       item['artist_alias'], item['album_size'], item['music_size']]
+                cursor.execute(r'insert into t_artists values (%s, %s, %s, %s, %s) on duplicate key update f_name=%s, f_alias=%s, f_album_size=%s, f_music_size=%s',
                                row)
 
             elif isinstance(item, items.albums_item):
                 # print("item: ", item)
                 row = [item['artist_id'], item['artist_name'], item['album_id'], item['album_name'],
                                item['album_comments_id'], item['album_publishTS'], item['album_company'], item['album_size']]
-                cursor.execute(r'insert into t_albums values (?, ?, ?, ?, ?, ?, ?, ?) on duplicate key update '
+                cursor.execute(r'insert into t_albums values (%s, %s, %s, %s, %s, %s, %s, %s) on duplicate key update '
                                r'f_artist_id={}, f_artist_name="{}", f_album_name="{}", f_album_comment_id={}, f_album_ts={},'
                                r'f_album_company="{}", f_album_size={}'.format(item['artist_id'], item['artist_name'], item['album_name'],
                                item['album_comments_id'], item['album_publishTS'], item['album_company'], item['album_size']), row)
