@@ -7,20 +7,6 @@
 
 from scrapy.item import Item, Field
 
-class song_item(Item):
-    song_id = Field()
-    song_name = Field()
-    author = Field()
-    comment_cnt = Field()
-
-class comment_item(Item):
-    comment_id = Field()
-    user_nick = Field()
-    user_id = Field()
-    liked_count = Field()
-    content = Field()
-    replied_content = Field()
-
 class artist_item(Item):
     artist_id = Field()
     artist_name = Field()
