@@ -11,7 +11,7 @@
 import os
 import platform
 
-BOT_NAME = 'music163'
+BOT_NAME = 'music163.albums'
 
 SPIDER_MODULES = ['music163.spiders']
 NEWSPIDER_MODULE = 'music163.spiders'
